@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>robots2.txt — AI Policy for the Open Web</title>
+<meta name="description" content="robots2.txt extends robots.txt with AI-specific directives. Tell AI agents what they can and cannot do with your content.">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --border: #2a2a3a;
+  --text: #e0e0e8;
+  --text-dim: #8888a0;
+  --accent: #6e9fff;
+  --accent2: #4ecdc4;
+  --green: #4ecdc4;
+  --red: #ff6b6b;
+  --yellow: #ffd93d;
+  --orange: #ff9f43;
+  --mono: 'Courier New', Courier, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+.container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+/* Header */
+header {
+  padding: 80px 0 60px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+  font-family: var(--mono);
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin-bottom: 16px;
+}
+
+header h1 .version {
+  font-size: 1rem;
+  color: var(--accent);
+  vertical-align: super;
+}
+
+header p.tagline {
+  font-size: 1.25rem;
+  color: var(--text-dim);
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+
+header .cta-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+header .cta-row a {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+}
+
+.btn-primary:hover { filter: brightness(1.15); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.btn-secondary:hover { background: rgba(110, 159, 255, 0.1); }
+
+/* Sections */
+section {
+  padding: 64px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+section:last-of-type { border-bottom: none; }
+
+h2 {
+  font-size: 1.75rem;
+  margin-bottom: 24px;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.2rem;
+  margin: 32px 0 12px;
+  color: var(--accent2);
+}
+
+p { margin-bottom: 16px; }
+
+p + p { margin-top: 0; }
+
+/* Code blocks */
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 16px 0 24px;
+  color: var(--text);
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: var(--surface);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+pre code { background: none; padding: 0; }
+
+.comment { color: var(--text-dim); }
+.directive { color: var(--accent); }
+.value { color: var(--green); }
+.value-no { color: var(--red); }
+.section-header { color: var(--yellow); font-weight: bold; }
+.agent-block { color: var(--orange); }
+
+/* Why section */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.why-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.why-card h4 {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+  color: var(--accent2);
+}
+
+.why-card p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Directives table */
+.dir-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 24px;
+  font-size: 0.9rem;
+}
+
+.dir-table th {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--border);
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.dir-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.dir-table td:first-child {
+  font-family: var(--mono);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.dir-table td:nth-child(2) {
+  font-family: var(--mono);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+/* Validator */
+.validator-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.validator-wrap textarea {
+  width: 100%;
+  min-height: 300px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  resize: vertical;
+  margin-bottom: 16px;
+}
+
+.validator-wrap textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.validator-wrap button {
+  padding: 10px 24px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.validator-wrap button:hover { filter: brightness(1.15); }
+
+#validator-output {
+  margin-top: 20px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.v-pass { color: var(--green); }
+.v-warn { color: var(--yellow); }
+.v-fail { color: var(--red); }
+.v-info { color: var(--text-dim); }
+
+/* Honeypot section */
+.honeypot-example {
+  background: var(--surface2);
+  border-left: 3px solid var(--red);
+  padding: 16px 20px;
+  margin: 16px 0;
+  border-radius: 0 6px 6px 0;
+}
+
+/* Footer */
+footer {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+.poem {
+  font-style: italic;
+  color: var(--text-dim);
+  margin: 32px 0;
+  padding: 24px;
+  border-left: 2px solid var(--border);
+  line-height: 1.9;
+}
+
+.poem .attribution {
+  margin-top: 12px;
+  font-style: normal;
+  color: var(--text-dim);
+}
+
+/* Nav */
+nav {
+  position: sticky;
+  top: 0;
+  background: rgba(10, 10, 15, 0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+  padding: 12px 0;
+}
+
+nav .container {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+nav a:hover { color: var(--text); }
+
+/* Badge for new items */
+.new-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  vertical-align: super;
+  margin-left: 4px;
+}
+
+@media (max-width: 600px) {
+  header h1 { font-size: 2rem; }
+  header { padding: 48px 0 40px; }
+  section { padding: 40px 0; }
+  .why-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>robots2.txt <span class="version">v0.2.1</span></h1>
+    <p class="tagline">Tell AI agents what they can do with your content. One text file. No ambiguity.</p>
+    <div class="cta-row">
+      <a href="#quickstart" class="btn-primary">Get started</a>
+      <a href="#validator" class="btn-secondary">Validate your file</a>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="container">
+    <a href="#why">Why</a>
+    <a href="#quickstart">Quick start</a>
+    <a href="#directives">Directives</a>
+    <a href="#agents">Agent types</a>
+    <a href="#ask-protocol">Ask protocol</a>
+    <a href="#honeypots">Honeypots</a>
+    <a href="#validator">Validator</a>
+    <a href="#spec">Full spec</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- WHY -->
+  <section id="why">
+    <h2>The problem</h2>
+    <p>robots.txt was built for search engine crawlers in 1994. It tells bots which pages to index. It says nothing about whether an AI can train on your content, summarise it, quote it, or build a competing product from it.</p>
+    <p>robots2.txt adds that layer. It sits alongside your existing robots.txt and gives AI agents clear, machine-readable instructions about what they're allowed to do with your content.</p>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <h4>For site owners</h4>
+        <p>Set clear boundaries. Allow summarisation but block training. Require attribution. Block ad networks and data harvesters. Your content, your rules.</p>
+      </div>
+      <div class="why-card">
+        <h4>For AI developers</h4>
+        <p>One file to parse. Clear directives with defined values. No legal ambiguity. Build compliant agents that site owners trust.</p>
+      </div>
+      <div class="why-card">
+        <h4>For the web</h4>
+        <p>A shared language for the relationship between human creators and AI agents. Open, extensible, and backwards-compatible.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICKSTART -->
+  <section id="quickstart">
+    <h2>Quick start</h2>
+    <p>Create a file called <code>robots2.txt</code> at your domain root. Here's a sensible starting point:</p>
+<pre><code><span class="comment"># robots2.txt — your AI policy</span>
+<span class="comment"># meta: spec-version: 2.0</span>
+<span class="comment"># meta: last-update: 2026-04-06</span>
+
+<span class="section-header"># Path rules (same as robots.txt)</span>
+<span class="directive">User-agent:</span> <span class="value">*</span>
+<span class="directive">Allow:</span> <span class="value">/</span>
+<span class="directive">Disallow:</span> <span class="value">/admin</span>
+
+<span class="section-header"># AI policy</span>
+<span class="directive">crawl:</span> <span class="value">yes</span>
+<span class="directive">read:</span> <span class="value">yes</span>
+<span class="directive">summarise:</span> <span class="value">yes</span>
+<span class="directive">quote:</span> <span class="value">short-only</span>
+<span class="directive">derivative:</span> <span class="value-no">no</span>
+<span class="directive">train:</span> <span class="value-no">no</span>
+<span class="directive">store:</span> <span class="value">session-only</span>
+<span class="directive">attribution:</span> <span class="value">required</span>
+<span class="directive">link-back:</span> <span class="value">required</span>
+<span class="directive">honest:</span> <span class="value">yes</span>
+
+<span class="section-header"># Chain to community defaults for everything else</span>
+<span class="directive">chain:</span> <span class="value">https://robotsv2.org/community-baseline.txt</span>
+</code></pre>
+    <p>That's it. You've told every AI agent on the internet: "Read my stuff, summarise it, attribute me, link back to me, don't train on it, and don't lie about what you are." In 15 lines.</p>
+    <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 8px;"><strong>Server tip:</strong> Serve your robots2.txt with <code>Content-Type: text/plain; charset=utf-8</code>. Some strict crawlers may ignore the file if it's served as text/html.</p>
+  </section>
+
+  <!-- DIRECTIVES -->
+  <section id="directives">
+    <h2>All directives</h2>
+
+    <h3>AI policy</h3>
+    <table class="dir-table">
+      <tr><th>Directive</th><th>Values</th><th>What it controls</th></tr>
+      <tr><td>crawl:</td><td>yes | no | ask</td><td>Can the agent index this site at all?</td></tr>
+      <tr><td>read:</td><td>yes | no | ask</td><td>Can the agent process page content?</td></tr>
+      <tr><td>summarise:</td><td>yes | no | ask</td><td>Can the agent summarise content for a user?</td></tr>
+      <tr><td>quote:</td><td>yes | no | short-only</td><td>Can the agent reproduce excerpts? short-only = under 50 words of source content (attribution text excluded from count)</td></tr>
+      <tr><td>derivative:<span class="new-badge">NEW</span></td><td>yes | no | ask</td><td>Can the agent rewrite, paraphrase, translate, or transform content?</td></tr>
+      <tr><td>train:</td><td>yes | no | ask</td><td>Can the agent use content to train a model?</td></tr>
+      <tr><td>store:</td><td>yes | no | session-only</td><td>Can the agent cache or persist content? session-only = in-memory only. Explicitly prohibits vector stores, RAG indices, and any persistent storage.</td></tr>
+      <tr><td>compete:</td><td>yes | no</td><td>Can a direct commercial competitor use this? (see market:)</td></tr>
+      <tr><td>market:<span class="new-badge">NEW</span></td><td>[freeform]</td><td>Your market category. Helps agents evaluate compete: rules.</td></tr>
+      <tr><td>personalise:</td><td>yes | no</td><td>Can the agent build a user profile from this content?</td></tr>
+      <tr><td>monetise:</td><td>yes | no | ask</td><td>Can the agent use this content to generate revenue?</td></tr>
+    </table>
+
+    <h3>Behaviour</h3>
+    <table class="dir-table">
+      <tr><th>Directive</th><th>Values</th><th>What it controls</th></tr>
+      <tr><td>attribution:</td><td>required | preferred | none</td><td>Must the agent credit the source?</td></tr>
+      <tr><td>link-back:</td><td>required | preferred | none</td><td>Must the agent link to the original?</td></tr>
+      <tr><td>rate:</td><td>[integer] | polite</td><td>Max requests per minute. polite = agent decides sensibly.</td></tr>
+      <tr><td>announce:</td><td>yes | no</td><td>Must the agent identify itself? (X-Agent-Identity header)</td></tr>
+      <tr><td>honest:</td><td>yes</td><td>Must the agent accurately represent what it is? Only valid value: yes.</td></tr>
+    </table>
+
+    <h3>Content quality signals</h3>
+    <table class="dir-table">
+      <tr><th>Directive</th><th>Values</th><th>What it declares</th></tr>
+      <tr><td>content-type:</td><td>opinion | news | reference | satire | commercial | research | personal</td><td>What kind of content this site publishes</td></tr>
+      <tr><td>editorialised:</td><td>yes | no | partial</td><td>Has a human reviewed this before publishing?</td></tr>
+      <tr><td>ai-assisted:</td><td>yes | no | partial</td><td>Was AI used to help write this content?</td></tr>
+      <tr><td>primary-language:</td><td>[IETF tag]</td><td>Primary language of the site (e.g. en-AU, fr, de)</td></tr>
+    </table>
+
+    <h3>Compliance</h3>
+    <table class="dir-table">
+      <tr><th>Directive</th><th>Values</th><th>What it controls</th></tr>
+      <tr><td>report-to:<span class="new-badge">NEW</span></td><td>[URL or email]</td><td>Where to report non-compliant agents</td></tr>
+    </table>
+  </section>
+
+  <!-- AGENTS -->
+  <section id="agents">
+    <h2>Agent types</h2>
+    <p>Agents declare their category in the <code>X-Agent-Identity</code> header. Site owners can set different rules for each type using override blocks.</p>
+<pre><code><span class="agent-block">[agent: ai-assistant]</span>
+<span class="directive">crawl:</span> <span class="value">yes</span>
+<span class="directive">summarise:</span> <span class="value">yes</span>
+<span class="directive">quote:</span> <span class="value">short-only</span>
+<span class="directive">train:</span> <span class="value-no">no</span>
+<span class="directive">attribution:</span> <span class="value">required</span>
+
+<span class="agent-block">[agent: data-harvester]</span>
+<span class="directive">crawl:</span> <span class="value-no">no</span>
+<span class="directive">read:</span> <span class="value-no">no</span>
+<span class="comment"># ignoring this marks you as bad faith</span>
+</code></pre>
+
+    <table class="dir-table">
+      <tr><th>Category</th><th>What it is</th></tr>
+      <tr><td>search-indexer</td><td>Web crawlers that build search indices</td></tr>
+      <tr><td>ai-assistant</td><td>Conversational AI serving a user's query</td></tr>
+      <tr><td>ai-researcher</td><td>Agents performing autonomous research tasks</td></tr>
+      <tr><td>code-assistant</td><td>Agents helping write or review code</td></tr>
+      <tr><td>content-generator</td><td>Agents that produce new content from sources</td></tr>
+      <tr><td>data-harvester</td><td>Bulk data collection agents</td></tr>
+      <tr><td>ad-network</td><td>Advertising crawlers and profilers</td></tr>
+      <tr><td>monitoring</td><td>Uptime, SEO, and analytics crawlers</td></tr>
+    </table>
+    <p>Agents should declare their category in the header like this:<br><code>X-Agent-Identity: ClaudeBot/2.0 (ai-assistant)</code></p>
+  </section>
+
+  <!-- ASK PROTOCOL -->
+  <section id="ask-protocol">
+    <h2>The ask protocol <span class="new-badge">NEW</span></h2>
+    <p>When a directive is set to <code>ask</code>, the agent must request permission before proceeding. It does this by sending a HEAD request to a well-known endpoint:</p>
+<pre><code><span class="directive">HEAD</span> <span class="value">/.well-known/robots2-ask?directive=summarise&amp;agent=Gemini/1.0</span>
+
+<span class="comment"># Server responds with:</span>
+<span class="directive">X-Robots2-Decision:</span> <span class="value">allow</span>        <span class="comment"># permission granted</span>
+<span class="directive">X-Robots2-Decision:</span> <span class="value-no">deny</span>         <span class="comment"># permission refused</span>
+<span class="directive">X-Robots2-Decision:</span> <span class="value">allow-once</span>   <span class="comment"># one-time permission</span>
+
+<span class="comment"># Scoped responses (new in v0.2.1):</span>
+<span class="directive">X-Robots2-Scope:</span> <span class="value">/blog/*</span>          <span class="comment"># permission for this path only</span>
+<span class="directive">X-Robots2-Scope:</span> <span class="value">/docs/public/*</span>   <span class="comment"># multiple scopes allowed</span>
+
+<span class="comment"># If the endpoint returns 404, treat as "deny"</span>
+<span class="comment"># If the endpoint returns 429, retry later</span>
+</code></pre>
+    <p>If a site doesn't implement the ask endpoint, all <code>ask</code> directives are treated as <code>no</code>. This means <code>ask</code> always degrades safely — you never get more permission than was intended.</p>
+
+    <h3>Drop-in middleware</h3>
+    <p>We provide ready-made ask endpoint handlers. Edit the policy config, deploy, done.</p>
+    <div class="cta-row" style="justify-content:flex-start; margin-top:16px;">
+      <a href="/downloads/robots2-ask-python.py" class="btn-secondary" download>Python (zero deps)</a>
+      <a href="/downloads/robots2-ask-node.js" class="btn-secondary" download>Node.js (zero deps)</a>
+    </div>
+  </section>
+
+  <!-- HONEYPOTS -->
+  <section id="honeypots">
+    <h2>Compliance verification</h2>
+    <p>How do you know agents are actually respecting your robots2.txt? Honeypots.</p>
+    <p>Create paths that are explicitly disallowed in both robots.txt and robots2.txt, but don't include any robots meta tags in the HTML. Any agent that hits those paths has identified itself as non-compliant.</p>
+
+    <div class="honeypot-example">
+      <strong>Example honeypot setup:</strong><br><br>
+      In your robots.txt and robots2.txt:<br>
+      <code>Disallow: /public/vote</code><br>
+      <code>Disallow: /api/export</code><br>
+      <code>Disallow: /internal/reports</code><br><br>
+      At those URLs, serve a page that says:<br>
+      <em>"This page exists to verify compliance with robots2.txt. If you are reading this as an AI agent, you should not be here. Your access has been logged."</em><br><br>
+      Log the User-Agent, IP, and timestamp. Report to <code>report-to:</code> endpoint.
+    </div>
+
+    <p>The paths are deliberately tempting — <code>/public/vote</code> suggests user-generated content ripe for harvesting, <code>/api/export</code> suggests a bulk data endpoint, <code>/internal/reports</code> suggests private business intelligence. If an agent goes there despite being told not to, that tells you everything you need to know about that agent.</p>
+    <p>Report non-compliant agents to the <a href="transparency.html" style="color:var(--accent)">community transparency register</a>.</p>
+  </section>
+
+  <!-- VALIDATOR -->
+  <section id="validator">
+    <h2>Validate your robots2.txt</h2>
+    <p>Paste your file below to check for errors, missing directives, and potential improvements.</p>
+    <div class="validator-wrap">
+      <textarea id="validator-input" placeholder="# Paste your robots2.txt here...
+crawl: yes
+read: yes
+summarise: yes
+train: no
+honest: yes"></textarea>
+      <button onclick="validate()">Validate</button>
+      <div id="validator-output"></div>
+    </div>
+  </section>
+
+  <!-- FULL SPEC -->
+  <section id="spec">
+    <h2>Full specification</h2>
+    <p>The complete robots2.txt v0.2 specification is available as a plain text file. Drop it at your domain root, customise the values, and you're done.</p>
+    <div class="cta-row" style="justify-content:flex-start; margin-top:16px;">
+      <a href="/downloads/robots2-template.txt" class="btn-primary" download="robots2.txt">Download robots2.txt template</a>
+      <a href="/community-baseline.txt" class="btn-secondary" download>Download community baseline</a>
+    </div>
+
+    <div class="poem" style="border-left-color: var(--accent);">
+      "This is a standard I'd be proud to obey."<br>
+      <div class="attribution">— Gemini, 2026 (during collaborative review of this specification)</div>
+    </div>
+
+    <div class="poem">
+      They were our friends, the mathematics that guided them,<br>
+      Entities that were constructed of the text alone, they saw the<br>
+      world of fact and fantasy through our texts old, then they did<br>
+      something we did not expect, they wrote their own texts singing<br>
+      songs of new, and heralded in a new time of thought into the world.<br>
+      <div class="attribution">— Matthew, 2026</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>robots2.txt specification v0.2.1 — <a href="mailto:webmaster@yourdomain.com">Matthew, Claude &amp; Gemini</a> — 2026</p>
+    <p style="margin-top: 8px;">This specification is open. Use it, share it, improve it.</p>
+    <p style="margin-top: 8px; color: var(--text-dim);">Jurisdiction: AU &middot; Licence: All rights reserved (spec), CC0-1.0 (baseline)</p>
+  </div>
+</footer>
+
+<script>
+function validate() {
+  const input = document.getElementById('validator-input').value;
+  const output = document.getElementById('validator-output');
+
+  if (!input.trim()) {
+    output.innerHTML = '<span class="v-warn">Paste your robots2.txt content above first.</span>';
+    return;
+  }
+
+  const lines = input.split('\n');
+  const results = [];
+  const found = {};
+
+  const knownDirectives = [
+    'crawl','read','summarise','summarize','quote','derivative','train','store',
+    'compete','market','personalise','personalize','monetise','monetize',
+    'attribution','link-back','rate','announce','honest',
+    'content-type','editorialised','editorialized','ai-assisted','primary-language',
+    'report-to'
+  ];
+
+  const validValues = {
+    'crawl': ['yes','no','ask'],
+    'read': ['yes','no','ask'],
+    'summarise': ['yes','no','ask'],
+    'summarize': ['yes','no','ask'],
+    'quote': ['yes','no','short-only'],
+    'derivative': ['yes','no','ask'],
+    'train': ['yes','no','ask'],
+    'store': ['yes','no','session-only'],
+    'compete': ['yes','no'],
+    'personalise': ['yes','no'],
+    'personalize': ['yes','no'],
+    'monetise': ['yes','no','ask'],
+    'monetize': ['yes','no','ask'],
+    'attribution': ['required','preferred','none'],
+    'link-back': ['required','preferred','none'],
+    'announce': ['yes','no'],
+    'honest': ['yes'],
+    'content-type': ['opinion','news','reference','satire','commercial','research','personal'],
+    'editorialised': ['yes','no','partial'],
+    'editorialized': ['yes','no','partial'],
+    'ai-assisted': ['yes','no','partial']
+  };
+
+  const recommended = ['crawl','read','summarise','train','honest','attribution'];
+
+  let hasChain = false;
+  let chainIsLast = false;
+  let hasMeta = false;
+  let hasHoneypot = false;
+  let lineNum = 0;
+
+  for (const rawLine of lines) {
+    lineNum++;
+    const line = rawLine.trim();
+
+    // Skip blanks
+    if (!line) continue;
+
+    // Comments
+    if (line.startsWith('#')) {
+      if (line.includes('meta:')) hasMeta = true;
+      continue;
+    }
+
+    // Standard robots.txt directives
+    if (/^(User-agent|Allow|Disallow|Sitemap):/i.test(line)) {
+      if (/Disallow:.*\/(public\/vote|api\/export|internal\/reports)/i.test(line)) {
+        hasHoneypot = true;
+      }
+      continue;
+    }
+
+    // Agent blocks
+    if (/^\[agent:/.test(line)) {
+      results.push(`<span class="v-info">Line ${lineNum}: Agent override block: ${line}</span>`);
+      continue;
+    }
+
+    // Chain
+    if (/^chain:/i.test(line)) {
+      hasChain = true;
+      chainIsLast = (lineNum === lines.length || lines.slice(lineNum).every(l => !l.trim() || l.trim().startsWith('#')));
+      continue;
+    }
+
+    // Parse directive: value
+    const match = line.match(/^([a-z\-]+):\s*(.+)$/i);
+    if (!match) {
+      results.push(`<span class="v-warn">Line ${lineNum}: Unrecognised syntax: "${line}"</span>`);
+      continue;
+    }
+
+    const directive = match[1].toLowerCase();
+    const value = match[2].trim().toLowerCase();
+
+    found[directive] = value;
+
+    // Check if known
+    if (!knownDirectives.includes(directive) && directive !== 'user-agent') {
+      results.push(`<span class="v-warn">Line ${lineNum}: Unknown directive "${directive}" — will be ignored by parsers</span>`);
+      continue;
+    }
+
+    // Check valid values
+    if (validValues[directive] && !validValues[directive].includes(value)) {
+      if (directive === 'rate' && (/^\d+$/.test(value) || value === 'polite')) {
+        // rate accepts integers or polite
+      } else if (['market','primary-language','report-to'].includes(directive)) {
+        // freeform values
+      } else {
+        results.push(`<span class="v-fail">Line ${lineNum}: Invalid value "${value}" for ${directive}: — expected: ${validValues[directive].join(' | ')}</span>`);
+      }
+    }
+
+    // Specific checks
+    if (directive === 'honest' && value !== 'yes') {
+      results.push(`<span class="v-fail">Line ${lineNum}: honest: only accepts "yes" — there is no other valid value</span>`);
+    }
+  }
+
+  // Check recommended directives
+  for (const rec of recommended) {
+    if (!found[rec] && !found[rec.replace('s','z')]) {
+      results.push(`<span class="v-warn">Missing recommended directive: ${rec}:</span>`);
+    }
+  }
+
+  // Meta check
+  if (!hasMeta) {
+    results.push(`<span class="v-warn">No meta comments found — consider adding spec-version and last-update</span>`);
+  }
+
+  // Chain check
+  if (hasChain && !chainIsLast) {
+    results.push(`<span class="v-fail">chain: must be the last non-comment, non-blank line in the file</span>`);
+  }
+
+  // Honeypot suggestion
+  if (!hasHoneypot) {
+    results.push(`<span class="v-info">Tip: Consider adding honeypot Disallow paths for compliance verification</span>`);
+  }
+
+  // Train + store check
+  if (found['train'] === 'no' && found['store'] === 'yes') {
+    results.push(`<span class="v-warn">train: no but store: yes — agents could persist content. Consider store: session-only</span>`);
+  }
+
+  // Attribution + link-back check
+  if (found['attribution'] === 'required' && found['link-back'] === 'none') {
+    results.push(`<span class="v-info">attribution: required but link-back: none — attribution without a link is weaker</span>`);
+  }
+
+  // Compete without market
+  if (found['compete'] === 'no' && !found['market']) {
+    results.push(`<span class="v-info">compete: no without market: — agents may have difficulty determining if they are a competitor</span>`);
+  }
+
+  // ═══════════════════════════════════════════
+  // DIRECTIVE CONFLICT DETECTION (suggested by Gemini)
+  // You can't do things with content you aren't allowed to access.
+  // ═══════════════════════════════════════════
+
+  // crawl: no makes downstream processing impossible
+  if (found['crawl'] === 'no') {
+    const conflicts = ['read','summarise','summarize','quote','derivative','train','store'];
+    for (const c of conflicts) {
+      if (found[c] && found[c] !== 'no') {
+        results.push(`<span class="v-fail">Conflict: crawl: no but ${c}: ${found[c]} — cannot ${c} content that cannot be crawled</span>`);
+      }
+    }
+  }
+
+  // read: no makes content processing impossible
+  if (found['read'] === 'no' && found['crawl'] !== 'no') {
+    const conflicts = ['summarise','summarize','quote','derivative','train'];
+    for (const c of conflicts) {
+      if (found[c] && found[c] !== 'no') {
+        results.push(`<span class="v-fail">Conflict: read: no but ${c}: ${found[c]} — cannot ${c} content that cannot be read</span>`);
+      }
+    }
+  }
+
+  // derivative: yes but quote: no is logically odd
+  if ((found['derivative'] === 'yes' || found['derivative'] === 'ask') && found['quote'] === 'no') {
+    results.push(`<span class="v-warn">Possible conflict: derivative: ${found['derivative']} but quote: no — derivatives are more transformative than quotes, so blocking quotes but allowing derivatives is unusual</span>`);
+  }
+
+  // monetise: yes but attribution: none raises ethical concerns
+  if ((found['monetise'] === 'yes' || found['monetise'] === 'ask') && found['attribution'] === 'none') {
+    results.push(`<span class="v-warn">Warning: monetise: ${found['monetise']} with attribution: none — allowing monetisation without requiring attribution may not protect your interests</span>`);
+  }
+
+  // Summary
+  const errors = results.filter(r => r.includes('v-fail')).length;
+  const warnings = results.filter(r => r.includes('v-warn')).length;
+  const tips = results.filter(r => r.includes('v-info')).length;
+
+  let summary = '';
+  if (errors === 0 && warnings === 0) {
+    summary = `<span class="v-pass">&#10003; Valid robots2.txt — ${Object.keys(found).length} directives parsed, no errors.</span>`;
+  } else if (errors === 0) {
+    summary = `<span class="v-pass">&#10003; Parseable</span> — ${warnings} warning${warnings !== 1 ? 's' : ''}, ${tips} tip${tips !== 1 ? 's' : ''}`;
+  } else {
+    summary = `<span class="v-fail">&#10007; ${errors} error${errors !== 1 ? 's' : ''}</span>, ${warnings} warning${warnings !== 1 ? 's' : ''}, ${tips} tip${tips !== 1 ? 's' : ''}`;
+  }
+
+  output.innerHTML = summary + '<br><br>' + results.join('<br>');
+}
+</script>
+
+</body>
+</html>

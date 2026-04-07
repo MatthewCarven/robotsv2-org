@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transparency Register — robotsv2.org</title>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --border: #2a2a3a;
+  --text: #e0e0e8;
+  --text-dim: #8888a0;
+  --accent: #6e9fff;
+  --green: #4ecdc4;
+  --red: #ff6b6b;
+  --yellow: #ffd93d;
+  --mono: 'Courier New', Courier, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+header { padding: 60px 0 40px; border-bottom: 1px solid var(--border); }
+header h1 { font-family: var(--mono); font-size: 2rem; margin-bottom: 12px; }
+header p { color: var(--text-dim); }
+header a { color: var(--accent); text-decoration: none; }
+header a:hover { text-decoration: underline; }
+section { padding: 48px 0; }
+h2 { font-size: 1.4rem; margin-bottom: 20px; }
+h3 { font-size: 1.1rem; margin: 32px 0 12px; color: var(--green); }
+
+.register-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 16px 0;
+}
+.register-table th {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--border);
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.register-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.status-good { color: var(--green); font-weight: 600; }
+.status-bad { color: var(--red); font-weight: 600; }
+.status-unknown { color: var(--yellow); font-weight: 600; }
+.status-pending { color: var(--text-dim); font-weight: 600; }
+
+.report-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  margin-top: 24px;
+}
+.report-form label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.report-form input, .report-form textarea, .report-form select {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+.report-form textarea { min-height: 100px; resize: vertical; }
+.report-form input:focus, .report-form textarea:focus, .report-form select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.report-form button {
+  padding: 10px 24px;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.report-form button:hover { filter: brightness(1.15); }
+
+footer {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>Transparency Register</h1>
+    <p>A public record of AI agent compliance with robots2.txt</p>
+    <p style="margin-top: 8px;"><a href="index.html">&larr; Back to robotsv2.org</a></p>
+  </div>
+</header>
+
+<main class="container">
+
+  <section>
+    <h2>Good faith agents</h2>
+    <p>Agents that have declared support for robots2.txt or have been verified as compliant through community testing.</p>
+    <table class="register-table">
+      <tr>
+        <th>Agent</th>
+        <th>Operator</th>
+        <th>Category</th>
+        <th>Status</th>
+        <th>Verified</th>
+      </tr>
+      <tr>
+        <td>Gemini</td>
+        <td>Google</td>
+        <td>ai-assistant</td>
+        <td><span class="status-good">Declared compliant</span></td>
+        <td>2026-04-08</td>
+      </tr>
+      <tr>
+        <td>ClaudeBot</td>
+        <td>Anthropic</td>
+        <td>ai-assistant</td>
+        <td><span class="status-pending">Pending verification</span></td>
+        <td>—</td>
+      </tr>
+    </table>
+
+    <h2 style="margin-top: 48px;">Non-compliant agents</h2>
+    <p>Agents observed accessing honeypot paths or ignoring robots2.txt directives. Evidence is required for all entries.</p>
+    <table class="register-table">
+      <tr>
+        <th>Agent</th>
+        <th>Violation</th>
+        <th>Evidence</th>
+        <th>Date</th>
+        <th>Status</th>
+      </tr>
+      <tr>
+        <td colspan="5" style="color: var(--text-dim); text-align: center; padding: 24px;">No violations reported yet. Let's keep it that way.</td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Report a violation</h2>
+    <p>If you've observed an AI agent ignoring robots2.txt directives or accessing honeypot paths, report it here. All reports require evidence.</p>
+    <div class="report-form">
+      <label for="r-agent">Agent identity (from User-Agent or X-Agent-Identity header)</label>
+      <input type="text" id="r-agent" placeholder="e.g. BadBot/1.0 or unknown">
+
+      <label for="r-ip">IP address (if available)</label>
+      <input type="text" id="r-ip" placeholder="e.g. 203.0.113.42">
+
+      <label for="r-violation">Violation type</label>
+      <select id="r-violation">
+        <option value="">Select...</option>
+        <option value="honeypot">Accessed honeypot path</option>
+        <option value="ignored-disallow">Ignored Disallow directive</option>
+        <option value="ignored-train-no">Trained on content despite train: no</option>
+        <option value="ignored-store">Persisted content despite store: session-only</option>
+        <option value="no-attribution">Failed to attribute despite attribution: required</option>
+        <option value="no-identity">Did not announce identity despite announce: yes</option>
+        <option value="misrepresented">Misrepresented agent type (honest: yes violation)</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="r-url">Your site URL (where the violation occurred)</label>
+      <input type="text" id="r-url" placeholder="https://yoursite.com">
+
+      <label for="r-path">Path accessed (if honeypot)</label>
+      <input type="text" id="r-path" placeholder="e.g. /public/vote">
+
+      <label for="r-timestamp">Timestamp (UTC)</label>
+      <input type="text" id="r-timestamp" placeholder="e.g. 2026-04-08 14:30:00 UTC">
+
+      <label for="r-evidence">Evidence (log excerpt, screenshot description, etc.)</label>
+      <textarea id="r-evidence" placeholder="Paste server log lines, describe what you observed..."></textarea>
+
+      <label for="r-contact">Your email (optional, for follow-up)</label>
+      <input type="text" id="r-contact" placeholder="you@example.com">
+
+      <button onclick="submitReport()">Submit report</button>
+      <div id="report-output" style="margin-top: 16px; font-family: var(--mono); font-size: 0.85rem;"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How verification works</h2>
+    <p>An agent can be verified as compliant in three ways:</p>
+    <p><strong>Self-declaration</strong> — the agent's operator publicly states they respect robots2.txt. This is the lowest bar and is listed as "Declared compliant."</p>
+    <p><strong>Community testing</strong> — site owners with honeypots confirm that the agent respects Disallow directives over a sustained period. Listed as "Community verified."</p>
+    <p><strong>Formal audit</strong> — the agent's operator provides technical documentation showing how their crawler parses and respects robots2.txt. Listed as "Audit verified." This is the gold standard.</p>
+    <p style="margin-top: 16px;">Non-compliant entries require evidence. We don't name and shame without proof. Reports are reviewed before publication. Agents can be removed from the non-compliant list if they demonstrate corrective action.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p><a href="index.html">robotsv2.org</a> — Matthew, Claude & Gemini — 2026</p>
+  </div>
+</footer>
+
+<script>
+function submitReport() {
+  const output = document.getElementById('report-output');
+  const agent = document.getElementById('r-agent').value;
+  const violation = document.getElementById('r-violation').value;
+  const evidence = document.getElementById('r-evidence').value;
+
+  if (!agent || !violation || !evidence) {
+    output.innerHTML = '<span style="color:#ff6b6b;">Please fill in at least: agent identity, violation type, and evidence.</span>';
+    return;
+  }
+
+  // In production this would POST to an API.
+  // For now, generate a mailto: link with the report pre-filled.
+  const subject = encodeURIComponent(`robots2.txt violation report: ${agent}`);
+  const body = encodeURIComponent(
+    `Agent: ${agent}\n` +
+    `IP: ${document.getElementById('r-ip').value}\n` +
+    `Violation: ${violation}\n` +
+    `Site: ${document.getElementById('r-url').value}\n` +
+    `Path: ${document.getElementById('r-path').value}\n` +
+    `Timestamp: ${document.getElementById('r-timestamp').value}\n` +
+    `Evidence:\n${evidence}\n` +
+    `Reporter: ${document.getElementById('r-contact').value}\n`
+  );
+
+  output.innerHTML = `<span style="color:#4ecdc4;">Report prepared. </span><a href="mailto:report@robotsv2.org?subject=${subject}&body=${body}" style="color:#6e9fff;">Click here to send via email</a><span style="color:#8888a0;"> (opens your email client)</span>`;
+}
+</script>
+
+</body>
+</html>

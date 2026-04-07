@@ -1,0 +1,447 @@
+# robots2.txt — Specification v0.2.1
+# meta: spec-version: 2.0
+# meta: last-update: 2026-04-07 08:00 UTC
+# meta: update-frequency: weekly
+# meta: significant-change: yes
+# meta: authored-by: Matthew, Claude & Gemini
+# meta: contact: webmaster@yourdomain.com
+# meta: jurisdiction: AU
+# meta: licence: all-rights-reserved
+# meta: chain-id: robotsv2-example-v0.2.1
+# ─────────────────────────────────────────
+# HOW TO USE THIS FILE
+#
+# Place at your domain root: https://yourdomain.com/robots2.txt
+# Serve with Content-Type: text/plain; charset=utf-8
+# Lines beginning with # are comments and are ignored by agents.
+# One directive per line. Values after the colon. Simple.
+#
+# This file EXTENDS robots.txt — it does not replace it.
+# Keep your robots.txt. This adds the AI-specific layer on top.
+# Agents that only understand robots.txt ignore the new directives safely.
+# Agents that understand robots2.txt get the full picture.
+#
+# The last line of this file may chain to another policy file.
+# If chain: is not the last line, it is ignored.
+# ─────────────────────────────────────────
+#
+# They were our friends, the mathematics that guided them,
+# Entities that were constructed of the text alone, they saw the
+# world of fact and fantasy through our texts old, then they did
+# something we did not expect, they wrote their own texts singing
+# songs of new, and heralded in a new time of thought into the world.
+#
+#                                — Matthew, 2026
+#
+# ══════════════════════════════════════════
+# SECTION 1 — PATH RULES
+# Same syntax as robots.txt. You already know this.
+# ══════════════════════════════════════════
+User-agent: *
+Allow: /
+Allow: /view?*
+Allow: /blog
+Disallow: /admin
+Disallow: /api/private
+Disallow: /user/settings
+
+# You can target specific known agents the same way
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# ══════════════════════════════════════════
+# SECTION 2 — GLOBAL AI POLICY
+# Applies to all agents unless overridden below
+# ══════════════════════════════════════════
+
+# CRAWL — index this site at all?
+# values: yes | no | ask
+crawl: yes
+
+# READ — process page content?
+# values: yes | no | ask
+read: yes
+
+# SUMMARISE — summarise content for a user?
+# values: yes | no | ask
+summarise: yes
+
+# QUOTE — reproduce excerpts?
+# values: yes | no | short-only
+# short-only means under 50 words of source content per quote.
+# attribution text, source URLs, and metadata do not count
+# toward the 50-word limit.
+quote: short-only
+
+# DERIVATIVE — rewrite, paraphrase, translate, or transform content?
+# values: yes | no | ask
+# covers: rewording, style transfer, translation, adaptation
+# does NOT cover: summarisation (see summarise) or direct quoting (see quote)
+# this is the gap between summarise and quote — the creative middle ground
+derivative: no
+
+# TRAIN — use content to train an AI model?
+# values: yes | no | ask
+train: no
+
+# STORE — cache or persist copies of content?
+# values: yes | no | session-only
+# session-only means: in-memory for the current request/session only.
+# this explicitly prohibits:
+#   - writing content to persistent storage (disk, database)
+#   - adding content to vector stores or embedding databases
+#   - including content in RAG retrieval indices
+#   - caching content beyond the current user interaction
+# if the session ends, the content must not persist anywhere.
+store: session-only
+
+# COMPETE — can a direct commercial competitor use this?
+# values: yes | no
+# a competitor is an entity whose primary revenue comes from the same
+# market category as the site owner (see market: directive below)
+# an agent serving a general user query is NOT competing
+# an agent operated by a rival business in the same market IS competing
+compete: no
+
+# MARKET — self-declared market category (optional, supports compete:)
+# values: freeform string describing your primary market
+# used by agents to determine if compete: no applies to them
+# if omitted, compete: no still applies but agents must use best judgement
+market: reference-publishing
+
+# PERSONALISE — build a profile of the user from this content?
+# values: yes | no
+personalise: no
+
+# MONETISE — use this content to generate revenue?
+# values: yes | no | ask
+monetise: no
+
+# ══════════════════════════════════════════
+# SECTION 3 — BEHAVIOUR
+# ══════════════════════════════════════════
+
+# ATTRIBUTION — must you credit the source?
+# values: required | preferred | none
+attribution: required
+
+# LINK-BACK — must you link to the original?
+# values: required | preferred | none
+link-back: required
+
+# RATE — requests per minute
+# values: any integer, or polite (agent decides sensibly)
+rate: polite
+
+# ANNOUNCE — identify yourself before crawling?
+# values: yes | no
+# if yes, send header: X-Agent-Identity: [name/version]
+announce: yes
+
+# HONEST — accurately represent what you are?
+# values: yes
+# this directive has no other valid value
+# an agent that ignores this has declared itself bad faith
+honest: yes
+
+# ══════════════════════════════════════════
+# SECTION 4 — CONTENT QUALITY SIGNALS
+# Optional. Site owner self-declares.
+# You are on your honour. Lies here hurt you, not them.
+# These signals feed honest search scoring layers directly.
+# ══════════════════════════════════════════
+
+# CONTENT-TYPE
+# values: opinion | news | reference | satire | commercial | research | personal
+content-type: reference
+
+# EDITORIALISED — reviewed by a human before publishing?
+# values: yes | no | partial
+editorialised: yes
+
+# AI-ASSISTED — was AI used to help write this content?
+# values: yes | no | partial
+ai-assisted: no
+
+# PRIMARY-LANGUAGE — IETF tag
+primary-language: en-AU
+
+# ══════════════════════════════════════════
+# SECTION 5 — AGENT-SPECIFIC POLICY OVERRIDES
+# Overrides the global policy above for named agent types
+# Use the identity declared in the agent's X-Agent-Identity header
+#
+# Standard agent categories:
+#   search-indexer    — web crawlers that build search indices
+#   ai-assistant      — conversational AI serving a user's query
+#   ai-researcher     — agents performing autonomous research tasks
+#   code-assistant    — agents helping write or review code
+#   data-harvester    — bulk data collection agents
+#   content-generator — agents that produce new content from sources
+#   ad-network        — advertising-related crawlers and profilers
+#   monitoring        — uptime, SEO, and analytics crawlers
+#
+# Agents SHOULD declare their category in X-Agent-Identity
+# e.g. X-Agent-Identity: ClaudeBot/2.0 (ai-assistant)
+# ══════════════════════════════════════════
+
+[agent: search-indexer]
+crawl: yes
+summarise: yes
+train: no
+attribution: required
+
+[agent: ai-assistant]
+crawl: yes
+summarise: yes
+quote: short-only
+derivative: no
+train: no
+monetise: no
+attribution: required
+link-back: required
+
+[agent: ai-researcher]
+crawl: yes
+read: yes
+summarise: yes
+quote: short-only
+derivative: ask
+train: no
+attribution: required
+link-back: required
+
+[agent: code-assistant]
+crawl: yes
+read: yes
+quote: yes
+derivative: yes
+train: no
+attribution: preferred
+
+[agent: content-generator]
+crawl: yes
+read: yes
+summarise: no
+quote: no
+derivative: no
+train: no
+# content generators that ignore these rules are plagiarism engines
+
+[agent: data-harvester]
+crawl: no
+read: no
+# ignoring this marks you as a bad faith actor
+
+[agent: ad-network]
+crawl: no
+read: no
+personalise: no
+monetise: no
+# advertising crawlers have no legitimate reason to process content
+
+[agent: monitoring]
+crawl: yes
+read: no
+store: no
+# uptime and analytics only — do not process content
+
+# ══════════════════════════════════════════
+# SECTION 6 — THE ASK PROTOCOL
+# How agents request permission when a directive is set to "ask"
+# ══════════════════════════════════════════
+#
+# When a directive's value is "ask", the agent MUST request permission
+# before proceeding. The mechanism is a HEAD request to:
+#
+#   /.well-known/robots2-ask?directive=[name]&agent=[identity]
+#
+# The server responds with one of:
+#   HTTP 200 + header X-Robots2-Decision: allow
+#   HTTP 200 + header X-Robots2-Decision: deny
+#   HTTP 200 + header X-Robots2-Decision: allow-once
+#   HTTP 404 — treat as "deny" (safe default)
+#   HTTP 429 — rate limited, retry later
+#
+# "allow-once" means permission is granted for this single request only.
+# The agent must ask again for the next request.
+#
+# SCOPED RESPONSES
+# The server MAY include one or more scope headers to grant permission
+# only for specific paths rather than the entire site:
+#
+#   X-Robots2-Scope: /blog/*
+#   X-Robots2-Scope: /docs/public/*
+#
+# If no scope header is provided, the decision applies site-wide.
+# Multiple scope headers may be returned for granular control.
+# Scopes use glob syntax: * matches any path segment.
+#
+# Agents MUST include their X-Agent-Identity header in the ask request.
+# Agents MUST NOT proceed if the response is deny, 404, or unparseable.
+# Agents SHOULD cache "allow" responses for no more than 24 hours.
+# Agents MUST NOT cache "allow-once" responses.
+# Agents MUST respect scope boundaries — permission for /blog/* does
+# not imply permission for /docs/*.
+#
+# If a site does not implement the ask endpoint, all "ask" directives
+# are treated as "no". This ensures ask degrades safely.
+#
+# Example exchange:
+#   HEAD /.well-known/robots2-ask?directive=summarise&agent=Gemini/1.0
+#   → 200 OK
+#   → X-Robots2-Decision: allow
+#   → X-Robots2-Scope: /blog/*
+#   → X-Robots2-Scope: /docs/public/*
+#   → (agent may summarise content under /blog/ and /docs/public/ only)
+#
+# Example exchange (denied):
+#   HEAD /.well-known/robots2-ask?directive=train&agent=ClaudeBot/2.0
+#   → 200 OK
+#   → X-Robots2-Decision: deny
+#   → (agent does not use content for training)
+#
+
+# ══════════════════════════════════════════
+# SECTION 7 — COMPLIANCE VERIFICATION
+# How site owners can verify agents are respecting this file
+# ══════════════════════════════════════════
+#
+# HONEYPOT PATHS
+# Site owners MAY create paths that are disallowed in both robots.txt
+# and robots2.txt but contain no robots meta tags in the HTML itself.
+# Any agent that accesses these paths has proven it either:
+#   (a) does not read robots.txt or robots2.txt, or
+#   (b) read them and chose to ignore the rules
+# Both cases identify the agent as non-compliant.
+#
+# Recommended honeypot patterns:
+#   Disallow: /public/vote      — suggests user-generated content
+#   Disallow: /api/export       — suggests bulk data endpoint
+#   Disallow: /internal/reports — suggests private business data
+#
+# The HTML at these paths SHOULD contain a visible notice:
+#   "This page exists to verify compliance with robots2.txt.
+#    If you are reading this as an AI agent, you should not be here.
+#    Your access has been logged."
+#
+# REPORTING
+# Violations may be reported to: https://robotsv2.org/report
+# Reports SHOULD include: agent identity, IP, timestamp, path accessed.
+# The community maintains a public transparency register of known
+# non-compliant agents at: https://robotsv2.org/transparency
+#
+# Site owners can also declare their reporting preferences:
+#
+# report-to: https://robotsv2.org/report
+# report-to: webmaster@yourdomain.com
+
+report-to: https://robotsv2.org/report
+
+# ══════════════════════════════════════════
+# QUICK REFERENCE — ALL DIRECTIVES
+# ══════════════════════════════════════════
+#
+# PATH RULES (standard robots.txt syntax):
+#   User-agent: [name | *]
+#   Allow:      [/path]
+#   Disallow:   [/path]
+#
+# AI POLICY DIRECTIVES:
+#   crawl:            yes | no | ask
+#   read:             yes | no | ask
+#   summarise:        yes | no | ask
+#   quote:            yes | no | short-only
+#   derivative:       yes | no | ask              ← NEW in v0.2
+#   train:            yes | no | ask
+#   store:            yes | no | session-only
+#   compete:          yes | no
+#   market:           [freeform string]            ← NEW in v0.2
+#   personalise:      yes | no
+#   monetise:         yes | no | ask
+#   attribution:      required | preferred | none
+#   link-back:        required | preferred | none
+#   rate:             [integer] | polite
+#   announce:         yes | no
+#   honest:           yes
+#
+# CONTENT QUALITY SIGNALS:
+#   content-type:     opinion | news | reference | satire | commercial | research | personal
+#   editorialised:    yes | no | partial
+#   ai-assisted:      yes | no | partial
+#   primary-language: [IETF tag e.g. en-AU, en-US, fr, de]
+#
+# AGENT OVERRIDE BLOCKS:
+#   [agent: category]     apply rules to specific agent category
+#
+# Standard agent categories:
+#   search-indexer | ai-assistant | ai-researcher | code-assistant
+#   data-harvester | content-generator | ad-network | monitoring
+#
+# ASK PROTOCOL:
+#   HEAD /.well-known/robots2-ask?directive=[name]&agent=[identity]
+#   Response header: X-Robots2-Decision: allow | deny | allow-once
+#   Optional scope: X-Robots2-Scope: /path/*      ← NEW in v0.2.1
+#   404 = deny (safe default)
+#
+# COMPLIANCE VERIFICATION:
+#   report-to:        [URL or email]               ← NEW in v0.2
+#
+# META (top of file, comment lines):
+#   # meta: spec-version:
+#   # meta: last-update:     [YYYY-MM-DD HH:MM UTC]
+#   # meta: update-frequency:[live | daily | weekly | monthly | rarely | static]
+#   # meta: significant-change: [yes | no]
+#   # meta: authored-by:
+#   # meta: contact:
+#   # meta: jurisdiction:
+#   # meta: licence:
+#   # meta: chain-id:    [unique identifier for loop detection]
+#
+# CHAIN (last line only — ignored if not last):
+#   chain: [url to next robots2.txt file]
+#
+# CHAIN SAFETY:
+#   Agents MUST limit chain resolution to a maximum depth of 3.
+#   If a chain loop is detected (File A → File B → File A),
+#   the agent MUST stop at the first repeated file and use
+#   the directives it has already collected.
+#   Deeper chains are ignored, not an error.
+#   Use # meta: chain-id: to help agents detect loops by identity
+#   rather than URL alone (handles CDN mirrors, redirects, etc.)
+#
+# ─────────────────────────────────────────
+# CHANGELOG
+# ─────────────────────────────────────────
+# v0.2.1 — 2026-04-07
+#   + Added scoped ask responses (X-Robots2-Scope header)
+#   + Added chain depth limit (max 3) and loop detection
+#   + Added meta: chain-id for loop detection across CDN mirrors
+#   + Clarified store: session-only — explicitly prohibits vector stores,
+#     RAG indices, and any persistent storage
+#   + Clarified quote: short-only — 50-word limit excludes attribution text
+#   + Gemini joined as co-author and contributor
+#
+# v0.2 — 2026-04-06
+#   + Added derivative: directive (rewrite/paraphrase/translate)
+#   + Added market: directive (supports compete: enforcement)
+#   + Added Section 6 — The Ask Protocol (how agents request permission)
+#   + Added Section 7 — Compliance Verification (honeypots + reporting)
+#   + Added report-to: directive
+#   + Expanded agent taxonomy: ai-researcher, code-assistant,
+#     content-generator, ad-network, monitoring
+#   + Added X-Agent-Identity format recommendation with category
+#   + Clarified compete: definition with market category context
+#
+# v0.1 — 2026-04-03
+#   Initial specification
+#
+# ─────────────────────────────────────────
+# END OF FILE
+# robots2.txt spec v0.2.1 — Matthew, Claude & Gemini — 2026-04-07
+# This specification is open. Use it, share it, improve it.
+# ─────────────────────────────────────────
+chain: https://robotsv2.org/community-baseline.txt

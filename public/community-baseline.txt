@@ -1,0 +1,148 @@
+# robots2.txt — Community Baseline Policy
+# meta: spec-version: 2.0
+# meta: last-update: 2026-04-06 10:00 UTC
+# meta: update-frequency: monthly
+# meta: significant-change: no
+# meta: authored-by: robotsv2.org community
+# meta: contact: baseline@robotsv2.org
+# meta: jurisdiction: international
+# meta: licence: CC0-1.0
+# ─────────────────────────────────────────
+# WHAT THIS FILE IS
+#
+# This is the community-maintained baseline policy for robots2.txt.
+# It represents reasonable defaults that protect site owners while
+# allowing legitimate AI use.
+#
+# HOW TO USE IT
+#
+# Add this as the last line of YOUR robots2.txt:
+#   chain: https://robotsv2.org/community-baseline.txt
+#
+# Your local directives always override this file.
+# This file only fills in gaps — directives you haven't set.
+# Think of it as sensible defaults, not mandatory rules.
+#
+# If you disagree with any baseline value, just set it yourself
+# in your own robots2.txt. Your file wins. Always.
+# ─────────────────────────────────────────
+
+# ══════════════════════════════════════════
+# BASELINE AI POLICY
+# These are the community-agreed reasonable defaults.
+# Conservative by design — when in doubt, protect the creator.
+# ══════════════════════════════════════════
+
+crawl: yes
+read: yes
+summarise: yes
+quote: short-only
+derivative: no
+train: no
+store: session-only
+compete: no
+personalise: no
+monetise: no
+
+# ══════════════════════════════════════════
+# BASELINE BEHAVIOUR
+# ══════════════════════════════════════════
+
+attribution: required
+link-back: preferred
+rate: polite
+announce: yes
+honest: yes
+
+# ══════════════════════════════════════════
+# BASELINE AGENT POLICIES
+# ══════════════════════════════════════════
+
+[agent: search-indexer]
+crawl: yes
+read: yes
+summarise: yes
+quote: short-only
+train: no
+attribution: required
+
+[agent: ai-assistant]
+crawl: yes
+read: yes
+summarise: yes
+quote: short-only
+derivative: no
+train: no
+monetise: no
+attribution: required
+link-back: preferred
+
+[agent: ai-researcher]
+crawl: yes
+read: yes
+summarise: yes
+derivative: ask
+train: no
+attribution: required
+link-back: required
+
+[agent: code-assistant]
+crawl: yes
+read: yes
+quote: yes
+derivative: yes
+train: no
+attribution: preferred
+
+[agent: content-generator]
+crawl: no
+read: no
+derivative: no
+train: no
+# the baseline position is: content generators should not
+# consume other people's content without explicit permission
+# site owners who want to allow this can override locally
+
+[agent: data-harvester]
+crawl: no
+read: no
+store: no
+# bulk data collection is opt-in, not opt-out
+
+[agent: ad-network]
+crawl: no
+read: no
+personalise: no
+monetise: no
+store: no
+
+[agent: monitoring]
+crawl: yes
+read: no
+store: no
+
+# ─────────────────────────────────────────
+# PHILOSOPHY
+#
+# The baseline follows three principles:
+#
+# 1. READING IS FREE, TAKING IS NOT
+#    Agents can read and summarise. They cannot train on,
+#    monetise, or build derivatives from content by default.
+#
+# 2. CREDIT THE CREATOR
+#    Attribution is always required. Link-backs are preferred.
+#    If you use someone's work, say so.
+#
+# 3. SILENCE MEANS NO
+#    If a site owner hasn't said yes, assume no.
+#    If the ask endpoint doesn't exist, assume deny.
+#    If in doubt, don't.
+#
+# These defaults protect creators while keeping the web useful.
+# They can be loosened by any site owner at any time.
+# They should never need to be tightened.
+# ─────────────────────────────────────────
+# END OF COMMUNITY BASELINE
+# robotsv2.org — Matthew, Claude & Gemini — maintained by the community, for the community
+# ─────────────────────────────────────────

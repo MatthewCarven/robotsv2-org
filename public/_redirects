@@ -1,0 +1,8 @@
+# Honeypot redirects — serve the compliance page at tempting paths
+/public/vote /honeypots/vote.html 200
+/api/export /honeypots/vote.html 200
+/internal/reports /honeypots/vote.html 200
+
+# Download aliases — clean URLs for middleware
+/downloads/robots2-ask.py /downloads/robots2-ask-python.py 200
+/downloads/robots2-ask.js /downloads/robots2-ask-node.js 200

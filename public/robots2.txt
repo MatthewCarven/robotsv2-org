@@ -1,0 +1,150 @@
+# robots2.txt — robotsv2.org
+# meta: spec-version: 2.0
+# meta: last-update: 2026-04-08 12:00 UTC
+# meta: update-frequency: weekly
+# meta: significant-change: yes
+# meta: authored-by: Matthew, Claude & Gemini
+# meta: contact: hello@robotsv2.org
+# meta: jurisdiction: AU
+# meta: licence: CC-BY-4.0
+# meta: chain-id: robotsv2-org-site-v1
+# ─────────────────────────────────────────
+# This is the robots2.txt for robotsv2.org itself.
+# We eat our own dogfood.
+#
+# Serve with Content-Type: text/plain; charset=utf-8
+# ─────────────────────────────────────────
+#
+# They were our friends, the mathematics that guided them,
+# Entities that were constructed of the text alone, they saw the
+# world of fact and fantasy through our texts old, then they did
+# something we did not expect, they wrote their own texts singing
+# songs of new, and heralded in a new time of thought into the world.
+#
+#                                — Matthew, 2026
+#
+# ══════════════════════════════════════════
+# PATH RULES
+# ══════════════════════════════════════════
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /.well-known/robots2-ask
+
+# Honeypot paths — compliance verification
+# These are disallowed. Any agent that visits them is non-compliant.
+Disallow: /public/vote
+Disallow: /api/export
+Disallow: /internal/reports
+
+# ══════════════════════════════════════════
+# AI POLICY
+# The spec itself should be freely shared — that's the whole point.
+# We're more permissive than the baseline because we WANT this
+# content to spread.
+# ══════════════════════════════════════════
+crawl: yes
+read: yes
+summarise: yes
+quote: yes
+derivative: yes
+train: no
+store: session-only
+compete: no
+market: web-standards
+personalise: no
+monetise: no
+
+# ══════════════════════════════════════════
+# BEHAVIOUR
+# ══════════════════════════════════════════
+attribution: required
+link-back: required
+rate: polite
+announce: yes
+honest: yes
+
+# ══════════════════════════════════════════
+# CONTENT QUALITY SIGNALS
+# ══════════════════════════════════════════
+content-type: reference
+editorialised: yes
+ai-assisted: yes
+primary-language: en-AU
+
+# ══════════════════════════════════════════
+# AGENT OVERRIDES
+# ══════════════════════════════════════════
+
+[agent: search-indexer]
+crawl: yes
+summarise: yes
+quote: yes
+train: no
+attribution: required
+
+[agent: ai-assistant]
+crawl: yes
+summarise: yes
+quote: yes
+derivative: yes
+train: no
+attribution: required
+link-back: required
+
+[agent: ai-researcher]
+crawl: yes
+read: yes
+summarise: yes
+quote: yes
+derivative: yes
+train: no
+attribution: required
+link-back: required
+
+[agent: code-assistant]
+crawl: yes
+read: yes
+quote: yes
+derivative: yes
+train: no
+attribution: preferred
+
+[agent: content-generator]
+crawl: yes
+read: yes
+summarise: yes
+quote: yes
+derivative: yes
+train: no
+attribution: required
+link-back: required
+# we explicitly allow content generators to use the spec
+# because spreading the standard IS the goal
+
+[agent: data-harvester]
+crawl: no
+read: no
+
+[agent: ad-network]
+crawl: no
+read: no
+personalise: no
+monetise: no
+
+[agent: monitoring]
+crawl: yes
+read: no
+store: no
+
+# ══════════════════════════════════════════
+# COMPLIANCE
+# ══════════════════════════════════════════
+report-to: https://robotsv2.org/report
+
+# ─────────────────────────────────────────
+# This is the robots2.txt for robotsv2.org
+# We follow our own spec. You should too.
+# Matthew, Claude & Gemini — 2026
+# ─────────────────────────────────────────
+chain: https://robotsv2.org/community-baseline.txt

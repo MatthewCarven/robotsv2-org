@@ -1,10 +1,10 @@
 # robots2.txt — Community Baseline Policy
-# meta: spec-version: 2.0
-# meta: last-update: 2026-04-06 10:00 UTC
+# meta: spec-version: 2.1
+# meta: last-update: 2026-04-09 10:00 UTC
 # meta: update-frequency: monthly
 # meta: significant-change: no
-# meta: authored-by: robotsv2.org community
-# meta: contact: baseline@robotsv2.org
+# meta: authored-by: robots2.org community
+# meta: contact: baseline@robots2.org
 # meta: jurisdiction: international
 # meta: licence: CC0-1.0
 # ─────────────────────────────────────────
@@ -17,7 +17,7 @@
 # HOW TO USE IT
 #
 # Add this as the last line of YOUR robots2.txt:
-#   chain: https://robotsv2.org/community-baseline.txt
+#   chain: https://robots2.org/community-baseline.txt
 #
 # Your local directives always override this file.
 # This file only fills in gaps — directives you haven't set.
@@ -43,6 +43,7 @@ store: session-only
 compete: no
 personalise: no
 monetise: no
+age-rating: all
 
 # ══════════════════════════════════════════
 # BASELINE BEHAVIOUR
@@ -144,5 +145,5 @@ store: no
 # They should never need to be tightened.
 # ─────────────────────────────────────────
 # END OF COMMUNITY BASELINE
-# robotsv2.org — Matthew, Claude & Gemini — maintained by the community, for the community
+# robots2.org — Matthew, Claude & Gemini — maintained by the community, for the community
 # ─────────────────────────────────────────

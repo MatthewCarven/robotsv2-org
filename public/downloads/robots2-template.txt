@@ -1,6 +1,6 @@
-# robots2.txt — Specification v0.2.1
-# meta: spec-version: 2.0
-# meta: last-update: 2026-04-07 08:00 UTC
+# robots2.txt — Specification v0.2.2
+# meta: spec-version: 2.1
+# meta: last-update: 2026-04-09 08:00 UTC
 # meta: update-frequency: weekly
 # meta: significant-change: yes
 # meta: authored-by: Matthew, Claude & Gemini
@@ -169,6 +169,15 @@ ai-assisted: no
 # PRIMARY-LANGUAGE — IETF tag
 primary-language: en-AU
 
+# AGE-RATING — minimum age rating for content
+# values: all | 7+ | 13+ | 16+ | 18+
+# Supports path scoping: age-rating: 18+:/adult-content
+# AI agents should check this before surfacing content to users
+# whose declared age falls below the rating.
+age-rating: all
+# age-rating: 13+:/forum
+# age-rating: 18+:/restricted
+
 # ══════════════════════════════════════════
 # SECTION 5 — AGENT-SPECIFIC POLICY OVERRIDES
 # Overrides the global policy above for named agent types
@@ -329,17 +338,17 @@ store: no
 #    Your access has been logged."
 #
 # REPORTING
-# Violations may be reported to: https://robotsv2.org/report
+# Violations may be reported to: https://robots2.org/report
 # Reports SHOULD include: agent identity, IP, timestamp, path accessed.
 # The community maintains a public transparency register of known
-# non-compliant agents at: https://robotsv2.org/transparency
+# non-compliant agents at: https://robots2.org/transparency
 #
 # Site owners can also declare their reporting preferences:
 #
-# report-to: https://robotsv2.org/report
+# report-to: https://robots2.org/report
 # report-to: webmaster@yourdomain.com
 
-report-to: https://robotsv2.org/report
+report-to: https://robots2.org/report
 
 # ══════════════════════════════════════════
 # QUICK REFERENCE — ALL DIRECTIVES
@@ -373,6 +382,8 @@ report-to: https://robotsv2.org/report
 #   editorialised:    yes | no | partial
 #   ai-assisted:      yes | no | partial
 #   primary-language: [IETF tag e.g. en-AU, en-US, fr, de]
+#   age-rating:       all | 7+ | 13+ | 16+ | 18+   ← NEW in v0.2.2
+#                     supports path scoping: age-rating: 18+:/path
 #
 # AGENT OVERRIDE BLOCKS:
 #   [agent: category]     apply rules to specific agent category
@@ -444,4 +455,4 @@ report-to: https://robotsv2.org/report
 # robots2.txt spec v0.2.1 — Matthew, Claude & Gemini — 2026-04-07
 # This specification is open. Use it, share it, improve it.
 # ─────────────────────────────────────────
-chain: https://robotsv2.org/community-baseline.txt
+chain: https://robots2.org/community-baseline.txt

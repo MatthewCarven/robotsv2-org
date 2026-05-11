@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "robotsv2-org",
-  "compatibility_date": "2026-04-07",
+  "name": "robots2-org",
+  "compatibility_date": "2026-04-17",
   "observability": {
     "enabled": true
   },

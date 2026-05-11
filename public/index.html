@@ -354,7 +354,7 @@ nav a:hover { color: var(--text); }
 
 <header>
   <div class="container">
-    <h1>robots2.txt <span class="version">v0.2.1</span></h1>
+    <h1>robots2.txt <span class="version">v0.2.2</span></h1>
     <p class="tagline">Tell AI agents what they can do with your content. One text file. No ambiguity.</p>
     <div class="cta-row">
       <a href="#quickstart" class="btn-primary">Get started</a>
@@ -424,9 +424,10 @@ nav a:hover { color: var(--text); }
 <span class="directive">attribution:</span> <span class="value">required</span>
 <span class="directive">link-back:</span> <span class="value">required</span>
 <span class="directive">honest:</span> <span class="value">yes</span>
+<span class="directive">age-rating:</span> <span class="value">all</span>
 
 <span class="section-header"># Chain to community defaults for everything else</span>
-<span class="directive">chain:</span> <span class="value">https://robotsv2.org/community-baseline.txt</span>
+<span class="directive">chain:</span> <span class="value">https://robots2.org/community-baseline.txt</span>
 </code></pre>
     <p>That's it. You've told every AI agent on the internet: "Read my stuff, summarise it, attribute me, link back to me, don't train on it, and don't lie about what you are." In 15 lines.</p>
     <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 8px;"><strong>Server tip:</strong> Serve your robots2.txt with <code>Content-Type: text/plain; charset=utf-8</code>. Some strict crawlers may ignore the file if it's served as text/html.</p>
@@ -469,7 +470,20 @@ nav a:hover { color: var(--text); }
       <tr><td>editorialised:</td><td>yes | no | partial</td><td>Has a human reviewed this before publishing?</td></tr>
       <tr><td>ai-assisted:</td><td>yes | no | partial</td><td>Was AI used to help write this content?</td></tr>
       <tr><td>primary-language:</td><td>[IETF tag]</td><td>Primary language of the site (e.g. en-AU, fr, de)</td></tr>
+      <tr><td>age-rating:<span class="new-badge">NEW</span></td><td>all | 7+ | 13+ | 16+ | 18+</td><td>Minimum age rating for content. Supports path scoping: <code>age-rating: 18+:/adult</code></td></tr>
     </table>
+
+    <h3>Age rating — path scoping</h3>
+    <p>The <code>age-rating:</code> directive is the first to support inline path scoping. A site-wide rating applies by default, with path-specific overrides for different sections:</p>
+<pre><code><span class="comment"># Site-wide default</span>
+<span class="directive">age-rating:</span> <span class="value">all</span>
+
+<span class="comment"># Path-specific overrides</span>
+<span class="directive">age-rating:</span> <span class="value">13+:/forum</span>
+<span class="directive">age-rating:</span> <span class="value">16+:/blog/mature</span>
+<span class="directive">age-rating:</span> <span class="value">18+:/adult-content</span>
+</code></pre>
+    <p>AI agents should check <code>age-rating</code> before summarising, quoting, or surfacing content to users. If the user's declared age falls below the rating, the agent should not present that content. This puts content classification in the hands of site owners — not governments or operating systems.</p>
 
     <h3>Compliance</h3>
     <table class="dir-table">
@@ -577,7 +591,7 @@ honest: yes"></textarea>
   <!-- FULL SPEC -->
   <section id="spec">
     <h2>Full specification</h2>
-    <p>The complete robots2.txt v0.2 specification is available as a plain text file. Drop it at your domain root, customise the values, and you're done.</p>
+    <p>The complete robots2.txt v0.2.2 specification is available as a plain text file. Drop it at your domain root, customise the values, and you're done.</p>
     <div class="cta-row" style="justify-content:flex-start; margin-top:16px;">
       <a href="/downloads/robots2-template.txt" class="btn-primary" download="robots2.txt">Download robots2.txt template</a>
       <a href="/community-baseline.txt" class="btn-secondary" download>Download community baseline</a>
@@ -602,7 +616,7 @@ honest: yes"></textarea>
 
 <footer>
   <div class="container">
-    <p>robots2.txt specification v0.2.1 — <a href="mailto:webmaster@yourdomain.com">Matthew, Claude &amp; Gemini</a> — 2026</p>
+    <p>robots2.txt specification v0.2.2 — <a href="mailto:webmaster@yourdomain.com">Matthew, Claude &amp; Gemini</a> — 2026</p>
     <p style="margin-top: 8px;">This specification is open. Use it, share it, improve it.</p>
     <p style="margin-top: 8px; color: var(--text-dim);">Jurisdiction: AU &middot; Licence: All rights reserved (spec), CC0-1.0 (baseline)</p>
   </div>
@@ -627,7 +641,7 @@ function validate() {
     'compete','market','personalise','personalize','monetise','monetize',
     'attribution','link-back','rate','announce','honest',
     'content-type','editorialised','editorialized','ai-assisted','primary-language',
-    'report-to'
+    'report-to','age-rating'
   ];
 
   const validValues = {
@@ -651,7 +665,8 @@ function validate() {
     'content-type': ['opinion','news','reference','satire','commercial','research','personal'],
     'editorialised': ['yes','no','partial'],
     'editorialized': ['yes','no','partial'],
-    'ai-assisted': ['yes','no','partial']
+    'ai-assisted': ['yes','no','partial'],
+    'age-rating': ['all','7+','13+','16+','18+']
   };
 
   const recommended = ['crawl','read','summarise','train','honest','attribution'];
@@ -720,6 +735,9 @@ function validate() {
         // rate accepts integers or polite
       } else if (['market','primary-language','report-to'].includes(directive)) {
         // freeform values
+      } else if (directive === 'age-rating' && /^(all|7\+|13\+|16\+|18\+):\//.test(value)) {
+        // age-rating with path scope (e.g. 18+:/adult-content)
+        results.push(`<span class="v-info">Line ${lineNum}: age-rating with path scope: ${value}</span>`);
       } else {
         results.push(`<span class="v-fail">Line ${lineNum}: Invalid value "${value}" for ${directive}: — expected: ${validValues[directive].join(' | ')}</span>`);
       }

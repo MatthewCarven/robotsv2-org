@@ -1,10 +1,10 @@
-# robots2.txt — robotsv2.org
-# meta: spec-version: 2.0
-# meta: last-update: 2026-04-08 12:00 UTC
+# robots2.txt — robots2.org
+# meta: spec-version: 2.1
+# meta: last-update: 2026-04-09 12:00 UTC
 # meta: update-frequency: weekly
 # meta: significant-change: yes
 # meta: authored-by: Matthew, Claude & Gemini
-# meta: contact: hello@robotsv2.org
+# meta: contact: hello@robots2.org
 # meta: jurisdiction: AU
 # meta: licence: CC-BY-4.0
 # meta: chain-id: robotsv2-org-site-v1
@@ -71,6 +71,7 @@ content-type: reference
 editorialised: yes
 ai-assisted: yes
 primary-language: en-AU
+age-rating: all
 
 # ══════════════════════════════════════════
 # AGENT OVERRIDES
@@ -140,11 +141,11 @@ store: no
 # ══════════════════════════════════════════
 # COMPLIANCE
 # ══════════════════════════════════════════
-report-to: https://robotsv2.org/report
+report-to: https://robots2.org/report
 
 # ─────────────────────────────────────────
 # This is the robots2.txt for robotsv2.org
 # We follow our own spec. You should too.
 # Matthew, Claude & Gemini — 2026
 # ─────────────────────────────────────────
-chain: https://robotsv2.org/community-baseline.txt
+chain: https://robots2.org/community-baseline.txt
